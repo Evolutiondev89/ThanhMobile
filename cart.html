@@ -78,7 +78,10 @@
             let totalCartMoney = 0;
 
             cartList.forEach(function (item) {
-                let pData = listProducts.find(p => p.id === item.id) || listAccessories.find(p => p.id === item.id);
+                let pData = listProducts.find(p => p.id === item.id) || 
+            listEarphones.find(p => p.id === item.id) ||
+            listChargers.find(p => p.id === item.id) ||
+            listFans.find(p => p.id === item.id);
 
                 if (pData) {
                     let priceNum = parseInt(pData.price.replace(/[^0-9]/g, '')) || 0;
