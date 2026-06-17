@@ -1,0 +1,526 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="author" content="Nguyen Duy Thanh">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <title>ThanhMobile</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="jquery4.0.js"></script>
+    <script src="data.js"></script>
+
+</head>
+<body>
+    <header>
+        <div class="container-header">
+            <div class="logo">
+                <a href="index.html">
+                    <img src="images/logo.png"/>
+                </a>
+            </div>
+            <div class="cell-category">
+                <div class="btn-header">
+                    <a href="#"><i class="fas fa-list"></i>Danh mục</a>
+                </div>
+            </div>
+            <div class="cell-search">
+                <div class="search-box">
+                    <input type="text" placeholder="Tìm kiếm sản phẩm...">
+                    <button><i class="fas fa-search"></i></button>
+                </div>
+            </div>
+            <div class="cell-cart">
+                <div class="btn-header">
+                    <a href="cart.html">
+                        <i class="fas fa-shopping-cart"></i>
+                            <span class="cart-text">Giỏ hàng</span>
+                        <span class="cart-badge">1</span>
+                    </a>
+                </div>
+            </div>
+            <div class="cell-login">
+                <div class="btn-header">
+                    <a href="login.html"><i class="fas fa-user"></i>Đăng nhập</a>
+                </div>
+            </div>
+            
+        </div>
+    </header>
+    <main>
+        <div class="container-main">
+            <div class="list-slide">
+                <div class="list-item">
+
+                    <ul>
+                        <li>
+                            <a href="#">
+                                <span class="menu-text"><i class="fas fa-mobile-alt"></i> Điện thoại</span>
+                                <i class="fas fa-chevron-right arrow-icon"></i> </a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="category.html?brand=iPhone">Iphone </a></li>
+                                    <li><a href="category.html?brand=Samsung">Samsung</a></li>
+                                    <li><a href="category.html?brand=Xiaomi">Xiaomi</a></li>
+                                    <li><a href="category.html?brand=Vivo">Vivo</a></li>
+                                    
+                                </ul>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <span class="menu-text"><i class="fas fa-user"></i> Tài khoản</span>
+                                <i class="fas fa-chevron-right arrow-icon"></i>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="signup.html">Đăng kí</a></li>
+                                <li><a href="login.html">Đăng nhập</a></li>
+                                <li><a class="logoutBtn">Đăng xuất</a></li>
+                                
+                                
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="category.html?type=chargers">
+                                <span class="menu-text"><i class="fas fa-plug"></i> Củ sạc</span>
+                                <i class="fas fa-chevron-right arrow-icon"></i>
+                            </a>
+
+                        </li>
+                        <li>
+                            <a href="category.html?type=fans">
+                                <span class="menu-text"><i class="fas fa-fan"></i> Quạt tản nhiệt</span>
+                                <i class="fas fa-chevron-right arrow-icon"></i>
+                            </a>
+                    
+                        </li>
+                        <li>
+                            <a href="category.html?type=earphones">
+                                <span class="menu-text"><i class="fas fa-headphones"></i> Tai nghe</span>
+                                <i class="fas fa-chevron-right arrow-icon"></i>
+                            </a>
+                
+                        </li>
+                        
+                    </ul>
+                </div>
+                <div class="slideshow-container">
+                    <div class="slider">
+                        <div class="slide"><img src="images/k90max.jpg" alt="Slide 1"></div>
+                        <div class="slide"><img src="images/xiaomi17.jpg" alt="Slide 2"></div>
+                        <div class="slide"><img src="images/realmegt8.jpg" alt="Slide 3"></div>
+                    </div>
+
+                    <button class="nav-btn prev-btn"><i class="fas fa-chevron-left"></i></button>
+                    <button class="nav-btn next-btn"><i class="fas fa-chevron-right"></i></button>
+
+                    <div class="dot-container">
+                        <span class="dot active"></span>
+                        <span class="dot"></span>
+                        <span class="dot"></span>
+                    </div>
+                </div>
+            </div>
+            
+
+
+            
+
+        <div class="product-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">DANH SÁCH ĐIỆN THOẠI MỚI NHẤT</h2>
+                </div>
+                <div class="product-grid" id="phone-grid"></div> 
+                <div class="view-more-container">
+                    <button class="btn-view-more" data-category="products">Xem thêm Điện thoại <i class="fas fa-angle-down"></i></button>
+                </div>
+            </div>
+            
+
+
+            <div class="accessory-banner">
+                <a href="#">
+                    <img src="images/cusac.png" alt="slidecusac">
+                </a>
+            </div>
+
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">DANH SÁCH PHỤ KIỆN NỔI BẬT</h2>
+                </div>
+
+                
+                <div class="product-grid" id="charger-grid"></div>
+
+                <div class="view-more-container">
+                    <button class="btn-view-more" data-category="earphones">Xem thêm Tai nghe <i class="fas fa-angle-down"></i></button>
+                </div>
+            </div>
+
+            <div class="accessory-banner">
+                <a href="#">
+                    <img src="images/quattannhiet.png" alt="slidecusac">
+                </a>
+            </div>
+
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">DANH SÁCH PHỤ KIỆN NỔI BẬT</h2>
+                </div>
+
+                <div class="product-grid" id="fan-grid"></div>
+
+                <div class="view-more-container">
+                    <button class="btn-view-more" data-category="chargers">Xem thêm Sạc cáp <i class="fas fa-angle-down"></i></button>
+                </div>
+            </div>
+
+            <div class="accessory-banner">
+                <a href="#">
+                    <img src="images/tainghe.png" alt="slidecusac">
+                </a>
+            </div>
+
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">DANH SÁCH PHỤ KIỆN NỔI BẬT</h2>
+                </div>
+                
+                <div class="product-grid" id="earphone-grid"></div>
+                
+                <div class="view-more-container">
+                    <button class="btn-view-more" data-category="fans">Xem thêm Quạt mini <i class="fas fa-angle-down"></i></button>
+                </div>
+            </div>
+
+            <div class="accessory-banner">
+                <a href="#">
+                    <img src="images/donghanh.png" alt="slidecusac">
+                </a>
+            </div>
+            <div class="accessory-banner">
+                <a href="#">
+                    <img src="images/phukienuytin.jpg" alt="slidecusac">
+                </a>
+            </div>
+            <div class="accessory-banner">
+                <a href="#">
+                    <img src="images/dienthoaiuytin.jpg" alt="slidecusac">
+                </a>
+            </div>
+
+            
+        </div>
+
+
+    </main>
+
+    <footer>
+        <div class="container-footer">
+            
+            <div class="shop-info">
+                <div class="title">THÔNG TIN</div>
+                <div class="detail">
+                    <ul>
+                        <li><a href="index.html">Địa chỉ: nguyenduythanh.somee.com</a></li>
+                        <li><a href="#">Điện thoại: 0325 xxx 469</a></li>
+                        <li><a href="#">Email: info@thanhmobile.vn</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="shop-info">
+                <div class="title">CHÍNH SÁCH</div>
+                <div class="detail">
+                    <ul>
+                        <li><a href="#">Chính sách bảo mật</a></li>
+                        <li><a href="#">Điều khoản sử dụng</a></li>
+                        <li><a href="#">Chính sách bảo hành</a></li>
+                        <li><a href="#">Chính sách đổi trả</a></li>
+                        <li><a href="#">Chính sách vận chuyển</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="shop-info">
+                <div class="title">LIÊN HỆ</div>
+                <div class="detail">
+                    <ul>
+                        <li><a href="#">Liên hệ</a></li>
+                        <li><a href="#">Hỗ trợ khách hàng</a></li>
+                        <li><a href="#">Tuyển dụng</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="shop-info">
+                <div class="title">KẾT NỐI</div>
+                <div class="detail">
+                    <ul>
+                        <li><a href="#"><i class="fab fa-facebook"></i>FACEBOOK</a></li>
+                        <li><a href="#"><i class="fab fa-x-twitter"></i>X</a></li>
+                        <li><a href="#"><i class="fab fa-instagram"></i>INSTAGRAM</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        
+    </footer>
+    <div class="floating-contact">
+        <input type="checkbox" id="toggle-menu" class="toggle-menu">
+        
+        <div class="contact-menu">
+            <a href="https://zalo.me/so_dien_thoai" target="_blank">Zalo</a>
+            <a href="https://m.me/id_facebook" target="_blank">Messenger</a>
+        </div>
+
+        <label for="toggle-menu" class="chat-icon">
+            <i class="fas fa-comments"></i>
+        </label>
+    </div>
+    
+    <script>
+    
+    
+    const displayState = {
+        products: false,
+        earphones: false,
+        chargers: false,
+        fans: false
+    };
+
+    const localStorageKey = 'cart-count';
+
+    
+    function updateCartBadge() {
+        let currentCount = localStorage.getItem(localStorageKey) || 0;
+        $('.cart-badge').text(currentCount);
+    }
+
+    $(document).ready(function () {
+        
+        $('.cell-category .btn-header a').click(function (e) {
+            e.preventDefault(); 
+            $('.list-item').toggleClass('active'); 
+        });
+
+        
+        updateCartBadge();
+
+       $(document).ready(function() {
+    
+        const currentUser = sessionStorage.getItem('currentUser');
+        if (currentUser) {
+            const user = JSON.parse(currentUser);
+            
+            
+            function layChuCuoi(fullname) {
+                if (!fullname) return "Khách";
+                
+                
+                var arr = fullname.trim().split(' ');
+                
+                
+                var chuCuoi = arr[arr.length - 1];
+                
+                return chuCuoi;
+            }
+            
+            
+            var tenCuoi = layChuCuoi(user.fullname);
+            
+            
+            $('.cell-login .btn-header a').html('<i class="fas fa-user"></i>' + tenCuoi);
+        }
+    });
+
+    
+        $('.logoutBtn').click(function(e) {
+            e.preventDefault();
+            
+            const currentUser = sessionStorage.getItem('currentUser');
+            
+            if (currentUser) {
+                
+                sessionStorage.removeItem('currentUser');
+                alert('Đã đăng xuất!');
+                location.reload();
+            } else {
+                
+                alert('Bạn chưa đăng nhập!');
+                window.location.href = 'login.html';
+            }
+        
+    });
+
+        
+
+        
+        
+
+
+if (localStorage.getItem('products') === null || JSON.parse(localStorage.getItem('products')).length === 0) {
+    localStorage.setItem('products', JSON.stringify(typeof listProducts !== 'undefined' ? listProducts : []));
+}
+if (localStorage.getItem('earphones') === null || JSON.parse(localStorage.getItem('earphones')).length === 0) {
+    localStorage.setItem('earphones', JSON.stringify(typeof listEarphones !== 'undefined' ? listEarphones : []));
+}
+if (localStorage.getItem('chargers') === null || JSON.parse(localStorage.getItem('chargers')).length === 0) {
+    localStorage.setItem('chargers', JSON.stringify(typeof listChargers !== 'undefined' ? listChargers : []));
+}
+if (localStorage.getItem('fans') === null || JSON.parse(localStorage.getItem('fans')).length === 0) {
+    localStorage.setItem('fans', JSON.stringify(typeof listFans !== 'undefined' ? listFans : []));
+}
+
+    
+
+        
+        function renderAllCategories() {
+            const currentProducts = JSON.parse(localStorage.getItem('products')) || [];
+            const currentEarphones = JSON.parse(localStorage.getItem('earphones')) || [];
+            const currentChargers = JSON.parse(localStorage.getItem('chargers')) || [];
+            const currentFans = JSON.parse(localStorage.getItem('fans')) || [];
+
+            
+            const phonesToRender = displayState.products ? currentProducts : currentProducts.slice(0, 4);
+            const earphonesToRender = displayState.earphones ? currentEarphones : currentEarphones.slice(0, 4);
+            const chargersToRender = displayState.chargers ? currentChargers : currentChargers.slice(0, 4);
+            const fansToRender = displayState.fans ? currentFans : currentFans.slice(0, 4);
+
+            
+            renderDynamicCategory(phonesToRender, '#phone-grid');
+            renderDynamicCategory(earphonesToRender, '#earphone-grid');
+            renderDynamicCategory(chargersToRender, '#charger-grid');
+            renderDynamicCategory(fansToRender, '#fan-grid');
+
+            
+            $('.btn-view-more[data-category="products"]').closest('.view-more-container').toggle(currentProducts.length > 4);
+            $('.btn-view-more[data-category="earphones"]').closest('.view-more-container').toggle(currentEarphones.length > 4);
+            $('.btn-view-more[data-category="chargers"]').closest('.view-more-container').toggle(currentChargers.length > 4);
+            $('.btn-view-more[data-category="fans"]').closest('.view-more-container').toggle(currentFans.length > 4);
+        }
+
+        
+        function renderDynamicCategory(dataList, targetGridId) {
+            const grid = $(targetGridId);
+            grid.empty();
+
+            
+            let productType = 'products';
+            if (targetGridId === '#earphone-grid') productType = 'earphones';
+            else if (targetGridId === '#charger-grid') productType = 'chargers';
+            else if (targetGridId === '#fan-grid') productType = 'fans';
+
+            dataList.forEach(item => {
+                let imgSource = item.image.startsWith('http') ? item.image : 'images/' + item.image;
+                
+                
+                const detailURL = `detail.html?id=${item.id}&type=${productType}`;
+                
+                const cardHTML = `
+                    <div class="product-card">
+                        <div class="product-img">
+                            <a href="${detailURL}">
+                                <img src="${imgSource}" alt="${item.name}">
+                            </a>
+                        </div>
+                        <div class="product-info">
+                            <h3>${item.name}</h3>
+                            <div class="price">
+                                <span class="current-price">${item.price}</span>
+                            </div>
+                            <a href="${detailURL}">
+                                <button class="btn-buy">MUA NGAY</button>
+                            </a>
+                        </div>
+                    </div>
+                `;
+                grid.append(cardHTML);
+            });
+        }
+
+        
+        renderAllCategories();
+
+        
+        $(document).on('click', '.btn-view-more', function (e) {
+            e.preventDefault();
+            const cat = $(this).data('category'); 
+            
+            
+            displayState[cat] = !displayState[cat]; 
+
+            
+            let label = 'Điện thoại';
+            if (cat === 'earphones') label = 'Tai nghe';
+            else if (cat === 'chargers') label = 'Sạc cáp';
+            else if (cat === 'fans') label = 'Quạt mini';
+
+            
+            if (displayState[cat]) {
+                $(this).html(`Thu gọn bớt ${label} <i class="fas fa-angle-up"></i>`);
+            } else {
+                $(this).html(`Xem thêm ${label} <i class="fas fa-angle-down"></i>`);
+            }
+
+            
+            renderAllCategories();
+        });
+
+        
+        window.addEventListener('storage', function (e) {
+            const trackedKeys = ['products', 'earphones', 'chargers', 'fans'];
+            if (trackedKeys.includes(e.key)) {
+                renderAllCategories();
+            }
+        });
+    });
+
+    
+    $(function () {
+        let current = 0;
+        const total = $('.slide').length;
+
+        function showSlide(index) {
+            $('.slider').css('transform', `translateX(-${index * (100 / 3)}%)`);
+            $('.dot').removeClass('active').eq(index).addClass('active');
+        }
+
+        $('.next-btn').click(function () {
+            current++;
+            if (current >= total) {
+                current = 0;
+            }
+            showSlide(current);
+        });
+
+        $('.prev-btn').click(function () {
+            current--;
+            if (current < 0) {
+                current = total - 1;
+            }
+            showSlide(current);
+        });
+
+        $('.dot').click(function () {
+            current = $(this).index();
+            showSlide(current);
+        });
+    });
+
+    
+    let autoSlide = setInterval(function() {
+        $('.next-btn').click(); 
+    }, 3000);
+
+    $('.slideshow-container').hover(
+        function() {
+            clearInterval(autoSlide); 
+        },
+        function() {
+            autoSlide = setInterval(function() {
+                $('.next-btn').click();
+            }, 3000); 
+        }
+    );
+    
+    </script>
+</body>
+</html>

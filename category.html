@@ -1,0 +1,204 @@
+
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Danh Mục Sản Phẩm - ThanhMobile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="jquery4.0.js"></script>
+    <script src="data.js"></script> 
+    <style>
+        .category-container { max-width: 1200px; margin: 30px auto; padding: 0 15px; min-height: 60vh; }
+        .category-header { margin-bottom: 25px; padding-bottom: 10px; border-bottom: 3px solid rgb(200,160,90);}
+        .category-title { font-size: 24px; color: #1a202c; font-weight: bold; text-transform: uppercase; }
+        .no-product { text-align: center; width: 100%; padding: 50px 0; font-size: 16px; color: #718096; }
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+        @media (max-width: 1024px) {
+            .product-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        @media (max-width: 700px) {
+            .product-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px; 
+            }
+            .category-title {
+                font-size: 18px; 
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container-header">
+            <div class="logo">
+                <a href="index.html">
+                    <img src="images/logo.png"/>
+                </a>
+            </div>
+            <div class="cell-category">
+                <div class="btn-header">
+                    <a href="#"><i class="fas fa-list"></i>Danh mục</a>
+                </div>
+            </div>
+            <div class="cell-search">
+                <div class="search-box">
+                    <input type="text" placeholder="Tìm kiếm sản phẩm...">
+                    <button><i class="fas fa-search"></i></button>
+                </div>
+            </div>
+            <div class="cell-cart">
+                <div class="btn-header">
+                    <a href="cart.html">
+                        <i class="fas fa-shopping-cart"></i>
+                            <span class="cart-text">Giỏ hàng</span>
+                        <span class="cart-badge">1</span>
+                    </a>
+                </div>
+            </div>
+            <div class="cell-login">
+                <div class="btn-header">
+                    <a href="login.html"><i class="fas fa-user"></i>Đăng nhập</a>
+                </div>
+            </div>
+            
+        </div>
+    </header>
+
+    <div class="category-container">
+        <div class="category-header">
+            <span class="category-title" id="page-title">Danh mục sản phẩm</span>
+        </div>
+        
+        <div class="product-grid" id="category-grid">
+            </div>
+    </div>
+    <footer>
+        <div class="container-footer">
+            
+            <div class="shop-info">
+                <div class="title">THÔNG TIN</div>
+                <div class="detail">
+                    <ul>
+                        <li><a href="index.html">Địa chỉ: nguyenduythanh.somee.com</a></li>
+                        <li><a href="#">Điện thoại: 0325 xxx 469</a></li>
+                        <li><a href="#">Email: info@thanhmobile.vn</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="shop-info">
+                <div class="title">CHÍNH SÁCH</div>
+                <div class="detail">
+                    <ul>
+                        <li><a href="#">Chính sách bảo mật</a></li>
+                        <li><a href="#">Điều khoản sử dụng</a></li>
+                        <li><a href="#">Chính sách bảo hành</a></li>
+                        <li><a href="#">Chính sách đổi trả</a></li>
+                        <li><a href="#">Chính sách vận chuyển</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="shop-info">
+                <div class="title">LIÊN HỆ</div>
+                <div class="detail">
+                    <ul>
+                        <li><a href="#">Liên hệ</a></li>
+                        <li><a href="#">Hỗ trợ khách hàng</a></li>
+                        <li><a href="#">Tuyển dụng</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="shop-info">
+                <div class="title">KẾT NỐI</div>
+                <div class="detail">
+                    <ul>
+                        <li><a href="#"><i class="fab fa-facebook"></i>FACEBOOK</a></li>
+                        <li><a href="#"><i class="fab fa-x-twitter"></i>X</a></li>
+                        <li><a href="#"><i class="fab fa-instagram"></i>INSTAGRAM</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        
+    </footer>
+
+    <script>
+        $(document).ready(function () {
+            
+            const urlParams = new URLSearchParams(window.location.search);
+            const brandFilter = urlParams.get('brand'); 
+            const typeFilter = urlParams.get('type');   
+
+            let filteredList = [];
+            let titleText = "Danh mục sản phẩm";
+
+            
+            if (brandFilter) {
+                titleText = "Điện thoại " + brandFilter;
+                
+                
+                const sourceProducts = (typeof listProducts !== 'undefined') ? listProducts : [];
+                filteredList = sourceProducts.filter(item => 
+                    item.name.toLowerCase().includes(brandFilter.toLowerCase())
+                );
+            } else if (typeFilter) {
+                
+                if (typeFilter === 'earphones') {
+                    titleText = "Tai nghe số";
+                    filteredList = (typeof listEarphones !== 'undefined') ? listEarphones : [];
+                } else if (typeFilter === 'chargers') {
+                    titleText = "Sạc cáp cao cấp";
+                    filteredList = (typeof listChargers !== 'undefined') ? listChargers : [];
+                } else if (typeFilter === 'fans') {
+                    titleText = "Quạt mini tiện lợi";
+                    filteredList = (typeof listFans !== 'undefined') ? listFans : [];
+                }
+            }
+
+            
+            $('#page-title').text(titleText);
+
+            
+            const grid = $('#category-grid');
+            grid.empty();
+
+            if (filteredList.length === 0) {
+                grid.html('<p class="no-product"><i class="fas fa-box-open"></i> Hiện chưa có sản phẩm nào thuộc danh mục này.</p>');
+            } else {
+                filteredList.forEach(item => {
+                    let imgSource = item.image.startsWith('http') ? item.image : 'images/' + item.image;
+                    
+                    const cardHTML = `
+                        <div class="product-card">
+                            <div class="product-img">
+                                <a href="detail.html?id=${item.id}">
+                                    <img src="${imgSource}" alt="${item.name}">
+                                </a>
+                            </div>
+                            <div class="product-info">
+                                <h3>${item.name}</h3>
+                                <div class="price">
+                                    <span class="current-price">${item.price}</span>
+                                </div>
+                                <a href="detail.html?id=${item.id}">
+                                    <button class="btn-buy">MUA NGAY</button>
+                                </a>
+                            </div>
+                        </div>
+                    `;
+                    grid.append(cardHTML);
+                });
+            }
+        });
+    </script>
+</body>
+</html>
