@@ -1,0 +1,256 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="author" content="Nguyen Duy Thanh">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <title>ThanhMobile</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="detail.css">
+    <script src="data.js"></script>
+    <script src="jquery4.0.js"></script>
+
+</head>
+<body>
+    <header>
+        <div class="container-header">
+            <div class="logo">
+                <a href="index.html">
+                    <img src="images/logo.png"/>
+                </a>
+            </div>
+            <div class="cell-search">
+                <div class="search-box">
+                    <input type="text" placeholder="Tìm kiếm sản phẩm...">
+                    <button><i class="fas fa-search"></i></button>
+                </div>
+            </div>
+            <div class="cell-cart">
+                <div class="btn-header">
+                    <a href="cart.html">
+                        <i class="fas fa-shopping-cart"></i>
+                        Giỏ hàng
+                        <span class="cart-badge">1</span>
+                    </a>
+                </div>
+            </div>
+            <div class="cell-login">
+                <div class="btn-header">
+                    <a href="login.html"><i class="fas fa-user"></i>Đăng nhập</a>
+                </div>
+            </div>
+            
+        </div>
+    </header>
+    <main>
+    <script>
+    $(document).ready(function () {
+        const urlParams = new URLSearchParams(window.location.search);
+        const productId = urlParams.get('id');
+
+       
+        if (!productId) {
+            $('main').html('<p class="error-msg">Không tìm thấy mã sản phẩm cần hiển thị!</p>');
+            return;
+        }
+
+
+        let product = null;
+        let isAccessory = false;
+
+        // tìm điện thoại
+        const phones = JSON.parse(localStorage.getItem('products')) || [];
+        product = phones.find(p => p.id === productId);
+
+        // tìm tai nghe
+        if (!product) {
+            const earphones = JSON.parse(localStorage.getItem('earphones')) || [];
+            product = earphones.find(p => p.id === productId);
+
+            if (product) isAccessory = true;
+        }
+
+        // tìm sạc
+        if (!product) {
+            const chargers = JSON.parse(localStorage.getItem('chargers')) || [];
+            product = chargers.find(p => p.id === productId);
+
+            if (product) isAccessory = true;
+        }
+
+        // tìm quạt
+        if (!product) {
+            const fans = JSON.parse(localStorage.getItem('fans')) || [];
+            product = fans.find(p => p.id === productId);
+
+            if (product) isAccessory = true;
+        }
+
+
+        if (product) {
+
+            document.title = product.name + " - ThanhMobile";
+
+
+            let specsHtml = '';
+            if (!isAccessory) {
+
+                specsHtml = `
+                    <table class="specs-table">
+                        <tr><td><i class="fas fa-microchip"></i> Chip xử lý:</td><td><strong>${product.chip}</strong></td></tr>
+                        <tr><td><i class="fas fa-mobile-alt"></i> Màn hình:</td><td>${product.screen}</td></tr>
+                        <tr><td><i class="fas fa-memory"></i> RAM:</td><td>${product.ram}</td></tr>
+                        <tr><td><i class="fas fa-hdd"></i> Bộ nhớ trong:</td><td>${product.rom}</td></tr>
+                        <tr><td><i class="fas fa-battery-full"></i> Dung lượng pin:</td><td>${product.battery}</td></tr>
+                    </table>
+                `;
+            } else {
+
+                specsHtml = `
+                    <table class="specs-table">
+                        <tr>
+                            <td style="vertical-align: top;"><i class="fas fa-info-circle"></i> Mô tả:</td>
+                            <td>${product.description}</td>
+                        </tr>
+                        <tr>
+                            <td style="vertical-align: top;"><i class="fas fa-check-circle"></i> Tương thích:</td>
+                            <td>${product.compatibility}</td>
+                        </tr>
+                    </table>
+                `;
+            }
+
+
+            let detailHtml = `
+                <div class="product-detail-container">
+                    <div class="detail-left">
+                        <div class="image-box">
+                            <img src="images/${product.image}" alt="${product.name}">
+                        </div>
+                    </div>
+                    
+                    <div class="detail-right">
+                        <h1 class="product-title">${product.name}</h1>
+                        
+                        <div class="price-box">
+                            <span class="current-price">${product.price}</span>
+                            ${product.oldPrice ? `<span class="old-price">${product.oldPrice}</span>` : ''}
+                        </div>
+
+                        <div class="specs-box">
+                            <h3>Thông tin chi tiết</h3>
+                            ${specsHtml}
+                        </div>
+
+                        <div class="action-buttons">
+                            <button class="btn-add-to-cart">
+                                <i class="fas fa-cart-plus"></i> THÊM GIỎ HÀNG
+                            </button>
+                            <button class="btn-buy-now">
+                                <i class="fas fa-hand-holding-usd"></i> MUA NGAY
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+
+            $('main').html(detailHtml);
+        } else {
+            $('main').html('<p class="error-msg">Sản phẩm này không tồn tại hoặc đã ngừng kinh doanh!</p>');
+        }
+
+
+        const localStorageCountKey = 'cart-count';
+        const localStorageListKey = 'cart-list';
+
+        function updateCartBadge() {
+            let currentCount = localStorage.getItem(localStorageCountKey) || 0;
+            $('.cart-badge').text(currentCount);
+        }
+
+
+        updateCartBadge();
+
+        $(document).on('click', '.btn-add-to-cart', function (e) {
+            e.preventDefault();
+            
+
+            let cartList = JSON.parse(localStorage.getItem(localStorageListKey)) || [];
+            
+
+            let existingItem = cartList.find(item => item.id === productId);
+            
+            if (existingItem) {
+                existingItem.quantity++; 
+            } else {
+                cartList.push({ id: productId, quantity: 1 }); 
+            }
+            
+            localStorage.setItem(localStorageListKey, JSON.stringify(cartList));
+            
+
+            let totalCount = cartList.reduce((sum, item) => sum + item.quantity, 0);
+            localStorage.setItem(localStorageCountKey, totalCount);
+            
+
+            updateCartBadge();
+            
+            alert('Đã thêm sản phẩm vào giỏ hàng thành công!');
+        });
+    });
+    </script>
+    </main>
+
+
+    <footer>
+        <div class="container-footer">
+            
+            <div class="shop-info">
+                <div class="title">THÔNG TIN</div>
+                <div class="detail">
+                    <ul>
+                        <li><a href="#">Địa chỉ: 123 Đường ABC, Phường XYZ, Thành phố HCM</a></li>
+                        <li><a href="#">Điện thoại: 0123 456 789</a></li>
+                        <li><a href="#">Email: info@thanhmobile.vn</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="shop-info">
+                <div class="title">CHÍNH SÁCH</div>
+                <div class="detail">
+                    <ul>
+                        <li><a href="#">Chính sách bảo mật</a></li>
+                        <li><a href="#">Điều khoản sử dụng</a></li>
+                        <li><a href="#">Chính sách bảo hành</a></li>
+                        <li><a href="#">Chính sách đổi trả</a></li>
+                        <li><a href="#">Chính sách vận chuyển</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="shop-info">
+                <div class="title">LIÊN HỆ</div>
+                <div class="detail">
+                    <ul>
+                        <li><a href="#">Liên hệ</a></li>
+                        <li><a href="#">Hỗ trợ khách hàng</a></li>
+                        <li><a href="#">Tuyển dụng</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="shop-info">
+                <div class="title">KẾT NỐI</div>
+                <div class="detail">
+                    <ul>
+                        <li><a href="#"><i class="fab fa-facebook"></i>FACEBOOK</a></li>
+                        <li><a href="#"><i class="fab fa-x-twitter"></i>X</a></li>
+                        <li><a href="#"><i class="fab fa-instagram"></i>INSTAGRAM</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+    </footer>
+</body>
+</html>

@@ -1,0 +1,230 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="author" content="Nguyen Duy Thanh">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <title>ThanhMobile</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="cart.css">
+    <script src="data.js"></script>
+    <script src="jquery4.0.js"></script>
+
+</head>
+<body>
+    <header>
+        <div class="container-header">
+            <div class="logo">
+                <a href="index.html">
+                    <img src="images/logo.png"/>
+                </a>
+            </div>
+            <div class="cell-search">
+                <div class="search-box">
+                    <input type="text" placeholder="Tìm kiếm sản phẩm...">
+                    <button><i class="fas fa-search"></i></button>
+                </div>
+            </div>
+            <div class="cell-cart">
+                <div class="btn-header">
+                    <a href="cart.html">
+                        <i class="fas fa-shopping-cart"></i>
+                        Giỏ hàng
+                        <span class="cart-badge">1</span>
+                    </a>
+                </div>
+            </div>
+            <div class="cell-login">
+                <div class="btn-header">
+                    <a href="login.html"><i class="fas fa-user"></i>Đăng nhập</a>
+                </div>
+            </div>
+            
+        </div>
+    </header>
+    <main>
+    <h2 class="cart-title">Giỏ hàng của bạn</h2>
+    
+    <div class="cart-layout-container" id="cart-content-area">
+        </div>
+</main>
+
+<script>
+    $(document).ready(function () {
+        const countKey = 'cart-count';
+        const listKey = 'cart-list';
+
+        function updateCartBadge() {
+            let currentCount = localStorage.getItem(countKey) || 0;
+            $('.cart-badge').text(currentCount);
+        }
+
+        function renderCartPage() {
+            let cartList = JSON.parse(localStorage.getItem(listKey)) || [];
+            let $container = $('#cart-content-area');
+
+            if (cartList.length === 0) {
+                $container.html(`
+                    <div class="empty-cart-message">
+                        <p><i class="fas fa-shopping-bag fa-3x" style="color:#d1d5db; margin-bottom:15px;"></i></p>
+                        <p>Giỏ hàng của bạn đang trống!</p>
+                        <a href="index.html" class="btn-back-home">Quay lại mua sắm</a>
+                    </div>
+                `);
+                return;
+            }
+
+            let itemsHtml = '';
+            let totalCartMoney = 0;
+
+            cartList.forEach(function (item) {
+                let pData = listProducts.find(p => p.id === item.id) || listAccessories.find(p => p.id === item.id);
+
+                if (pData) {
+                    let priceNum = parseInt(pData.price.replace(/[^0-9]/g, '')) || 0;
+                    let itemSubtotal = priceNum * item.quantity;
+                    totalCartMoney += itemSubtotal;
+
+                    itemsHtml += `
+                        <div class="cart-item" data-id="${item.id}">
+                            <div class="item-img">
+                                <img src="images/${pData.image}" alt="${pData.name}" width="80" height="80">
+                            </div>
+                            <div class="item-details">
+                                <div class="item-name">${pData.name}</div>
+                            </div>
+                            <div class="item-quantity-control">
+                                <button class="btn-minus" data-id="${item.id}">-</button>
+                                <span>${item.quantity}</span>
+                                <button class="btn-plus" data-id="${item.id}">+</button>
+                            </div>
+                            <div class="item-subtotal">
+                                ${itemSubtotal.toLocaleString('vi-VN')}đ
+                            </div>
+                            <button class="item-delete" data-id="${item.id}">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </div>
+                    `;
+                }
+            });
+
+            let finalLayoutHtml = `
+                <div class="cart-left">
+                    ${itemsHtml}
+                </div>
+                <div class="cart-right">
+                    <div class="cart-summary-box">
+                        <h3>Thông tin đơn hàng</h3>
+                        <div class="summary-row">
+                            <span>Tạm tính:</span>
+                            <strong>${totalCartMoney.toLocaleString('vi-VN')}đ</strong>
+                        </div>
+                        <div class="summary-row border-top">
+                            <span>Tổng tiền thanh toán:</span>
+                            <span class="total-price-text">${totalCartMoney.toLocaleString('vi-VN')}đ</span>
+                        </div>
+                        <button class="btn-checkout">TIẾN HÀNH ĐẶT HÀNG</button>
+                    </div>
+                </div>
+            `;
+
+            $container.html(finalLayoutHtml);
+        }
+
+        function saveAndRefresh(updatedList) {
+            localStorage.setItem(listKey, JSON.stringify(updatedList));
+            let totalCount = updatedList.reduce((sum, item) => sum + item.quantity, 0);
+            localStorage.setItem(countKey, totalCount);
+            
+            updateCartBadge();
+            renderCartPage();
+        }
+
+        updateCartBadge();
+        renderCartPage();
+
+        $(document).on('click', '.btn-plus', function () {
+            let targetId = $(this).data('id');
+            let cartList = JSON.parse(localStorage.getItem(listKey)) || [];
+            let match = cartList.find(item => item.id === targetId);
+            if (match) {
+                match.quantity++;
+                saveAndRefresh(cartList);
+            }
+        });
+
+
+        $(document).on('click', '.btn-minus', function () {
+            let targetId = $(this).data('id');
+            let cartList = JSON.parse(localStorage.getItem(listKey)) || [];
+            let match = cartList.find(item => item.id === targetId);
+            if (match) {
+                match.quantity--;
+                if (match.quantity <= 0) {
+                    cartList = cartList.filter(item => item.id !== targetId);
+                }
+                saveAndRefresh(cartList);
+            }
+        });
+
+
+        $(document).on('click', '.item-delete', function () {
+            let targetId = $(this).data('id');
+            let cartList = JSON.parse(localStorage.getItem(listKey)) || [];
+            cartList = cartList.filter(item => item.id !== targetId);
+            saveAndRefresh(cartList);
+        });
+    });
+</script>
+    <footer>
+        <div class="container-footer">
+            
+            <div class="shop-info">
+                <div class="title">THÔNG TIN</div>
+                <div class="detail">
+                    <ul>
+                        <li><a href="#">Địa chỉ: 123 Đường ABC, Phường XYZ, Thành phố HCM</a></li>
+                        <li><a href="#">Điện thoại: 0123 456 789</a></li>
+                        <li><a href="#">Email: info@thanhmobile.vn</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="shop-info">
+                <div class="title">CHÍNH SÁCH</div>
+                <div class="detail">
+                    <ul>
+                        <li><a href="#">Chính sách bảo mật</a></li>
+                        <li><a href="#">Điều khoản sử dụng</a></li>
+                        <li><a href="#">Chính sách bảo hành</a></li>
+                        <li><a href="#">Chính sách đổi trả</a></li>
+                        <li><a href="#">Chính sách vận chuyển</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="shop-info">
+                <div class="title">LIÊN HỆ</div>
+                <div class="detail">
+                    <ul>
+                        <li><a href="#">Liên hệ</a></li>
+                        <li><a href="#">Hỗ trợ khách hàng</a></li>
+                        <li><a href="#">Tuyển dụng</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="shop-info">
+                <div class="title">KẾT NỐI</div>
+                <div class="detail">
+                    <ul>
+                        <li><a href="#"><i class="fab fa-facebook"></i>FACEBOOK</a></li>
+                        <li><a href="#"><i class="fab fa-x-twitter"></i>X</a></li>
+                        <li><a href="#"><i class="fab fa-instagram"></i>INSTAGRAM</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+    </footer>
+</body>
+</html>

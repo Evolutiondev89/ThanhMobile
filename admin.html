@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bảng Quản Trị - ThanhMobile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+    <script>
+        if (sessionStorage.getItem('isAdminLoggedIn') !== 'true') {
+            alert('Bạn không có quyền truy cập! Vui lòng đăng nhập tài khoản Admin.');
+            window.location.href = 'login.html';
+        }
+    </script>
+
+    <div class="sidebar">
+        <div class="sidebar-brand">ThanhMobile ADMIN</div>
+        <ul class="sidebar-menu">
+            <!-- Thêm id và class tab-trigger vào các thẻ li -->
+            <li class="tab-trigger active" data-target="#tab-products"><a href="#"><i class="fas fa-box" style="margin-right: 10px;"></i> Quản lý sản phẩm</a></li>
+            <li class="tab-trigger" data-target="#tab-users"><a href="#"><i class="fas fa-users" style="margin-right: 10px;"></i> Quản lý tài khoản</a></li>
+            <li><a href="index.html"><i class="fas fa-eye" style="margin-right: 10px;"></i> Xem trang chủ</a></li>
+            <li><a href="#" onclick="logoutAdmin()"><i class="fas fa-sign-out-alt" style="margin-right: 10px;"></i> Đăng xuất</a></li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <!-- TAB 1: QUẢN LÝ SẢN PHẨM -->
+        <div id="tab-products" class="tab-content">
+            <div>
+                <div class="header-content">
+                    <h2>Bảng điều khiển quản trị hệ thống</h2>
+                </div>
+            </div>
+
+            <div class="table-container" style="margin-top: 20px;">
+                <div class="table-title">
+                    <i class="fas fa-desktop"></i> Danh sách sản phẩm đang hiển thị trên Website
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 60px;">STT</th>
+                            <th style="width: 80px;">Hình ảnh</th>
+                            <th>Tên sản phẩm</th>
+                            <th style="width: 130px;">Danh mục</th>
+                            <th class="table-price" style="width: 140px;text-align: center;">Giá bán</th>
+                            <th style="width: 250px; text-align: center;">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-product-table"></tbody>
+                </table>
+            </div>
+
+            <div class="table-container" style="margin-top: 30px;">
+                <div class="table-title" style="background-color: #2b6cb0;">
+                    <i class="fas fa-warehouse"></i> Danh sách sản phẩm trong Kho chứa (Mặc định ẩn / Chưa hiển thị)
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 60px;">STT</th>
+                            <th style="width: 80px;">Hình ảnh</th>
+                            <th>Tên sản phẩm</th>
+                            <th style="width: 130px;">Danh mục</th>
+                            <th class="table-price" style="width: 140px;text-align: center;">Giá bán</th>
+                            <th style="width: 250px; text-align: center;">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-warehouse-table"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- TAB 2: QUẢN LÝ TÀI KHOẢN (MẶC ĐỊNH ẨN) -->
+        <div id="tab-users" class="tab-content" style="display: none;">
+            <div>
+                <div class="header-content">
+                    <h2>Quản lý danh sách thành viên TMEMBER</h2>
+                </div>
+            </div>
+
+            <div class="table-container" style="margin-top: 20px;">
+                <div class="table-title" style="background-color: #2d3748;">
+                    <i class="fas fa-user-shield"></i> Danh sách tài khoản người dùng đăng ký hệ thống
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 100px;">ID Tài khoản</th> 
+                            <th>Họ và tên</th>
+                            <th>Tên tài khoản (Username)</th>
+                            <th>Email liên kết</th>
+                            <th style="width: 180px; text-align: center;">Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-user-table"></tbody>
+                </table>
+            </div>
+        </div>
+        <div class="modal-overlay" id="productModal">
+            <div class="modal-box">
+                <h3 id="modalTitle">Sửa sản phẩm</h3>
+
+                <form id="formProduct">
+                    <input type="hidden" id="form-action">
+                    <input type="hidden" id="old-id">
+
+                    <div class="form-group">
+                        <label>Danh mục</label>
+                        <select id="prod-category">
+                            <option value="products">Điện thoại</option>
+                            <option value="earphones">Tai nghe</option>
+                            <option value="chargers">Sạc cáp</option>
+                            <option value="fans">Quạt mini</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>ID</label>
+                        <input type="text" id="prod-id">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Tên sản phẩm</label>
+                        <input type="text" id="prod-name">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Giá bán</label>
+                        <input type="text" id="prod-price">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Ảnh</label>
+                        <input type="text" id="prod-image">
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn-cancel" id="btnCancelModal">
+                            Hủy
+                        </button>
+
+                        <button type="submit" class="btn-save">
+                            Lưu thay đổi
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    
+
+    <script src="data.js"></script>
+    <script src="jquery4.0.js"></script>
+    <script>
+        function logoutAdmin() {
+            sessionStorage.removeItem('isAdminLoggedIn');
+            window.location.href = 'login.html';
+        }
+
+        $(document).ready(function () {
+            // Khởi tạo các mảng danh mục hiển thị trên web
+            if (localStorage.getItem('products') === null) localStorage.setItem('products', JSON.stringify([]));
+            if (localStorage.getItem('earphones') === null) localStorage.setItem('earphones', JSON.stringify([]));
+            if (localStorage.getItem('chargers') === null) localStorage.setItem('chargers', JSON.stringify([]));
+            if (localStorage.getItem('fans') === null) localStorage.setItem('fans', JSON.stringify([]));
+            
+            // Khởi tạo mảng động lưu trữ riêng cho các sản phẩm trong kho
+            if (localStorage.getItem('warehouseProducts') === null) localStorage.setItem('warehouseProducts', JSON.stringify([]));
+
+            // HÀM 1: IN RA BẢNG CÁC SẢN PHẨM ĐANG HIỂN THỊ CÔNG KHAI TRÊN WEB (CHỈ CÓ SỬA VÀ HẠ VỀ KHO)
+            function loadAdminTable() {
+                const tableBody = $('#admin-product-table');
+                tableBody.empty();
+
+                const categories = ['products', 'earphones', 'chargers', 'fans'];
+                let stt = 1;
+                let hasData = false;
+
+                categories.forEach(cat => {
+                    const currentList = JSON.parse(localStorage.getItem(cat)) || [];
+                    currentList.forEach(item => {
+                        hasData = true;
+                        let imgSource = item.image.startsWith('http') ? item.image : 'images/' + item.image;
+                        let catLabel = '';
+                        if (cat === 'products') catLabel = '<span class="badge badge-products">Điện thoại</span>';
+                        else if (cat === 'earphones') catLabel = '<span class="badge badge-earphones">Tai nghe</span>';
+                        else if (cat === 'chargers') catLabel = '<span class="badge" style="background-color:#805ad5; color:#fff;">Sạc cáp</span>';
+                        else catLabel = '<span class="badge" style="background-color:#dd6b20; color:#fff;">Quạt mini</span>';
+
+                        const rowHTML = `
+                            <tr>
+                                <td>${stt++}</td>
+                                <td><img src="${imgSource}" class="prod-img" alt=""></td>
+                                <td><strong>${item.name}</strong><br><small style="color:#718096">ID: ${item.id}</small></td>
+                                <td>${catLabel}</td>
+                                <td style="color:#e53e3e; font-weight:bold;">${item.price}</td>
+                                <td style="text-align: center;">
+                                    <div class="actions-btn" style="justify-content: center;">
+                                        <button class="btn-action btn-edit-active btn-edit-trigger" data-id="${item.id}" data-cat="${cat}"><i class="fas fa-edit"></i> Sửa</button>
+                                        <button class="btn-action btn-restore-active btn-return-warehouse" data-id="${item.id}" data-cat="${cat}" style="background-color: #3182ce;"><i class="fas fa-arrow-down"></i> Hạ về kho</button>
+                                    </div>
+                                </td>
+                            </tr>
+                        `;
+                        tableBody.append(rowHTML);
+                    });
+                });
+
+                if (!hasData) {
+                    tableBody.append('<tr><td colspan="6" style="text-align:center; color:#a0aec0; font-style:italic; padding: 25px;">Không có sản phẩm nào hiển thị công khai trên giao diện Web.</td></tr>');
+                }
+            }
+
+            // QUÉT LOẠI TRỪ VÀ TRỰC QUAN HÓA BẢNG KHO CHỨA
+
+            function loadWarehouseTable() {
+                const warehouseBody = $('#admin-warehouse-table');
+                warehouseBody.empty();
+
+                let stt = 1;
+                let combinedWarehouseList = [];
+                const addedIds = new Set(); // Dùng Set để chặn đứng trùng lặp ID
+
+                // Lấy danh sách ID đang hiển thị công khai trên web để loại trừ tuyệt đối
+                const displayedIds = [];
+                const categories = ['products', 'earphones', 'chargers', 'fans'];
+                categories.forEach(cat => {
+                    const list = JSON.parse(localStorage.getItem(cat)) || [];
+                    list.forEach(p => displayedIds.push(p.id));
+                });
+
+                // NGUỒN ĐỘNG: Ưu tiên nạp các sản phẩm tự thêm hoặc bị hạ từ web xuống kho trước
+                const dynamicWarehouse = JSON.parse(localStorage.getItem('warehouseProducts')) || [];
+                dynamicWarehouse.forEach(dynItem => {
+                    if (!displayedIds.includes(dynItem.id) && !addedIds.has(dynItem.id)) {
+                        combinedWarehouseList.push({ ...dynItem, isStatic: false });
+                        addedIds.add(dynItem.id); 
+                    }
+                });
+
+                //NGUỒN TĨNH: Quét dữ liệu mẫu từ data.js (Chỉ lấy nếu chưa hiển thị trên web và chưa có trong kho động)
+                const staticData = {
+                    products: typeof listProducts !== 'undefined' ? listProducts : [],
+                    earphones: typeof listEarphones !== 'undefined' ? listEarphones : [],
+                    chargers: typeof listChargers !== 'undefined' ? listChargers : [],
+                    fans: typeof listFans !== 'undefined' ? listFans : []
+                };
+
+                categories.forEach(cat => {
+                    if (staticData[cat]) {
+                        staticData[cat].forEach(staticItem => {
+                            if (!displayedIds.includes(staticItem.id) && !addedIds.has(staticItem.id)) {
+                                combinedWarehouseList.push({
+                                    id: staticItem.id,
+                                    name: staticItem.name,
+                                    price: staticItem.price,
+                                    image: staticItem.image,
+                                    category: cat,
+                                    isStatic: true
+                                });
+                                addedIds.add(staticItem.id);
+                            }
+                        });
+                    }
+                });
+
+                if (combinedWarehouseList.length === 0) {
+                    warehouseBody.append('<tr><td colspan="6" style="text-align:center; color:#a0aec0; font-style:italic; padding: 25px;">Kho chứa trống rỗng. Tất cả sản phẩm đã được đưa lên Website!</td></tr>');
+                    return;
+                }
+
+                combinedWarehouseList.forEach(item => {
+                    let imgSource = item.image.startsWith('http') ? item.image : 'images/' + item.image;
+                    let catLabel = '';
+                    if (item.category === 'products') catLabel = 'Điện thoại';
+                    else if (item.category === 'earphones') catLabel = 'Tai nghe';
+                    else if (item.category === 'chargers') catLabel = 'Sạc cáp';
+                    else catLabel = 'Quạt mini';
+
+                    const rowHTML = `
+                        <tr>
+                            <td>${stt++}</td>
+                            <td><img src="${imgSource}" class="prod-img" alt=""></td>
+                            <td><strong>${item.name}</strong><br><small style="color:#718096">ID: ${item.id}</small></td>
+                            <td><span class="badge" style="background-color: #4a5568; color: #fff;">${catLabel}</span></td>
+                            <td style="color:#2b6cb0; font-weight:bold;">${item.price}</td>
+                            <td style="text-align: center;">
+                                <div class="actions-btn" style="justify-content: center;">
+                                    <button class="btn-action btn-restore-active btn-warehouse-activate" 
+                                            data-id="${item.id}" 
+                                            data-name="${item.name}" 
+                                            data-price="${item.price}" 
+                                            data-image="${item.image}" 
+                                            data-cat="${item.category}">
+                                        <i class="fas fa-cloud-upload-alt"></i> Đẩy lên Web
+                                    </button>
+                                    <button class="btn-action btn-delete-active btn-warehouse-permanent-delete" 
+                                            data-id="${item.id}" 
+                                            data-static="${item.isStatic}">
+                                        <i class="fas fa-trash-can"></i> Xóa bỏ
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                    warehouseBody.append(rowHTML);
+                });
+            }
+
+            function refreshAllTables() {
+                loadAdminTable();
+                loadWarehouseTable();
+            }
+            refreshAllTables();
+
+            // SỰ KIỆN 1: HẠ SẢN PHẨM ĐANG HIỂN THỊ TRÊN WEB VỀ LẠI KHO
+            $(document).on('click', '.btn-return-warehouse', function() {
+                const id = $(this).data('id');
+                const cat = $(this).data('cat');
+
+                if (confirm('Bạn có muốn hạ sản phẩm này xuống và đưa trở lại mục Kho chứa ẩn không?')) {
+                    let webList = JSON.parse(localStorage.getItem(cat)) || [];
+                    let warehouseList = JSON.parse(localStorage.getItem('warehouseProducts')) || [];
+
+                    const targetProduct = webList.find(p => p.id === id);
+                    if (targetProduct) {
+                        warehouseList.push({
+                            id: targetProduct.id,
+                            name: targetProduct.name,
+                            price: targetProduct.price,
+                            image: targetProduct.image,
+                            category: cat
+                        });
+                        localStorage.setItem('warehouseProducts', JSON.stringify(warehouseList));
+                    }
+
+                    webList = webList.filter(p => p.id !== id);
+                    localStorage.setItem(cat, JSON.stringify(webList));
+
+                    refreshAllTables();
+                    alert('Đã hạ kệ sản phẩm, đưa về Kho lưu trữ ẩn thành công!');
+                }
+            });
+
+            // SỰ KIỆN 2: ĐẨY SẢN PHẨM TỪ KHO CHỨA LÊN HIỂN THỊ TRÊN WEBSITE
+            $(document).on('click', '.btn-warehouse-activate', function() {
+                const id = $(this).data('id');
+                const name = $(this).data('name');
+                const price = $(this).data('price');
+                const image = $(this).data('image');
+                const cat = $(this).data('cat');
+
+                let webList = JSON.parse(localStorage.getItem(cat)) || [];
+                webList.push({ id: id, name: name, price: price, oldPrice: "", image: image });
+                localStorage.setItem(cat, JSON.stringify(webList));
+
+                let dynamicWarehouse = JSON.parse(localStorage.getItem('warehouseProducts')) || [];
+                dynamicWarehouse = dynamicWarehouse.filter(p => p.id !== id);
+                localStorage.setItem('warehouseProducts', JSON.stringify(dynamicWarehouse));
+
+                refreshAllTables();
+                alert('Đẩy sản phẩm lên kệ hiển thị Website thành công!');
+            });
+
+            // SỰ KIỆN 3: XÓA SẢN PHẨM TRONG KHO CHỨA
+            $(document).on('click', '.btn-warehouse-permanent-delete', function() {
+                const id = $(this).data('id');
+                const isStatic = $(this).data('static');
+
+                if (isStatic === true || isStatic === "true") {
+                    alert('Không thể xóa! Đây là sản phẩm dữ liệu mẫu cốt lõi thuộc file hệ thống (data.js).\nSản phẩm này sẽ luôn được giữ trong kho làm tài nguyên mẫu.');
+                    return;
+                }
+
+                if (confirm('Bạn có chắc muốn xóa hoàn toàn sản phẩm tự tạo này khỏi kho chứa không?')) {
+                    let dynamicWarehouse = JSON.parse(localStorage.getItem('warehouseProducts')) || [];
+                    dynamicWarehouse = dynamicWarehouse.filter(p => p.id !== id);
+                    localStorage.setItem('warehouseProducts', JSON.stringify(dynamicWarehouse));
+
+                    refreshAllTables();
+                    alert('Đã xóa bỏ sản phẩm ra khỏi bộ nhớ kho chứa!');
+                }
+            });
+
+            // SỰ KIỆN MỞ POPUP THÊM MỚI SẢN PHẨM VÀO TRONG KHO
+        
+
+            $('#btnCancelModal').on('click', function() {
+                $('#productModal').css('display', 'none');
+            });
+
+            // SỰ KIỆN SỬA SẢN PHẨM TRÊN BẢNG HIỂN THỊ WEB
+            $(document).on('click', '.btn-edit-trigger', function() {
+                $('.error-msg').remove();
+                const id = $(this).data('id');
+                const cat = $(this).data('cat');
+
+                const currentList = JSON.parse(localStorage.getItem(cat)) || [];
+                const item = currentList.find(p => p.id === id);
+
+                if (item) {
+                    $('#form-action').val('edit');
+                    $('#old-id').val(id);
+                    $('#prod-category').val(cat).prop('disabled', true);
+                    $('#prod-id').val(item.id).prop('disabled', true);
+                    $('#prod-name').val(item.name);
+                    $('#prod-price').val(item.price);
+                    $('#prod-image').val(item.image).prop('disabled', true);
+
+                    $('#modalTitle').text('Sửa thông tin sản phẩm: ' + item.name);
+                    $('#btnCancelModal').show();
+                    $('#productModal').css('display', 'flex');
+                }
+            });
+
+            // XỬ LÝ SUBMIT LƯU FORM (THÊM VÀO KHO HOẶC CẬP NHẬT SỬA)
+            // XỬ LÝ SUBMIT LƯU FORM (ĐÃ TỐI GIẢN - CHỈ KIỂM TRA VÀ CẬP NHẬT TÊN & GIÁ)
+        $('#formProduct').on('submit', function(e) {
+            e.preventDefault();
+            $('.error-msg').remove(); // Xóa sạch thông báo lỗi cũ
+
+            const action = $('#form-action').val();
+            const cat = $('#prod-category').val();
+            const name = $('#prod-name').val().trim();
+            const price = $('#prod-price').val().trim();
+
+            // 1. Chỉ kiểm tra trống đối với 2 ô được phép chỉnh sửa
+            let isValid = true;
+            if (name === '') { $('#prod-name').after('<span class="error-msg">Tên không được bỏ trống!</span>'); isValid = false; }
+            if (price === '') { $('#prod-price').after('<span class="error-msg">Giá không được bỏ trống!</span>'); isValid = false; }
+
+            if (!isValid) return false;
+
+            // 2. Phân nhánh xử lý logic
+            if (action === 'add') {
+                const id = $('#prod-id').val().trim();
+                const image = $('#prod-image').val().trim();
+                if (id === '') { $('#prod-id').after('<span class="error-msg">ID không được bỏ trống!</span>'); return false; }
+                if (image === '') { $('#prod-image').after('<span class="error-msg">Ảnh không được bỏ trống!</span>'); return false; }
+                
+                let isDuplicate = false;
+                const checkCategories = ['products', 'earphones', 'chargers', 'fans'];
+                checkCategories.forEach(c => {
+                    const list = JSON.parse(localStorage.getItem(c)) || [];
+                    if (list.some(p => p.id === id)) isDuplicate = true;
+                });
+
+                const dynamicWarehouse = JSON.parse(localStorage.getItem('warehouseProducts')) || [];
+                if (dynamicWarehouse.some(p => p.id === id)) isDuplicate = true;
+
+                if (isDuplicate) { $('#prod-id').after('<span class="error-msg">Mã ID này đang trùng lặp!</span>'); return false; }
+
+                dynamicWarehouse.push({ id: id, name: name, price: price, image: image, category: cat });
+                localStorage.setItem('warehouseProducts', JSON.stringify(dynamicWarehouse));
+                alert('Đã thêm sản phẩm mới vào Kho chứa ẩn!');
+                
+            } else if (action === 'edit') {
+                const oldId = $('#old-id').val();
+                
+                // Cập nhật Tên và Giá ngoài Website công khai
+                let currentList = JSON.parse(localStorage.getItem(cat)) || [];
+                currentList = currentList.map(p => {
+                    if (p.id === oldId) {
+                        return { ...p, name: name, price: price }; // Chỉ đè tên và giá mới
+                    }
+                    return p;
+                });
+                localStorage.setItem(cat, JSON.stringify(currentList));
+
+                // Cập nhật đồng bộ Tên và Giá vào mảng Kho chứa
+                let dynamicWarehouse = JSON.parse(localStorage.getItem('warehouseProducts')) || [];
+                const targetInWarehouse = dynamicWarehouse.find(p => p.id === oldId);
+                
+                if (targetInWarehouse) {
+                    dynamicWarehouse = dynamicWarehouse.map(p => {
+                        if (p.id === oldId) return { ...p, name: name, price: price };
+                        return p;
+                    });
+                } else {
+                    // Nếu là hàng data.js chưa có trong kho, lấy ảnh cũ lưu vết lại
+                    const originProduct = currentList.find(p => p.id === oldId);
+                    const currentImg = originProduct ? originProduct.image : "";
+                    dynamicWarehouse.push({ id: oldId, name: name, price: price, image: currentImg, category: cat });
+                }
+                localStorage.setItem('warehouseProducts', JSON.stringify(dynamicWarehouse));
+
+                alert('Cập nhật Tên và Giá sản phẩm thành công!');
+            }
+
+            refreshAllTables();
+            $('#productModal').css('display', 'none'); // Đóng popup ẩn modal
+        });
+            // 1. HÀM IN DANH SÁCH TÀI KHOẢN NGƯỜI DÙNG ĐĂNG KÝ
+            function loadUserTable() {
+                const userBody = $('#admin-user-table');
+                userBody.empty();
+                
+                // Quét mảng listUsers từ localStorage tương thích hoàn toàn với signup.html và login.html
+                const listUsers = JSON.parse(localStorage.getItem('listUsers')) || [];
+                let stt = 1;
+
+                if (listUsers.length === 0) {
+                    userBody.append('<tr><td colspan="5" style="text-align:center; color:#a0aec0; font-style:italic; padding: 25px;">Chưa có tài khoản thành viên nào đăng ký hệ thống.</td></tr>');
+                    return;
+                }
+
+                listUsers.forEach(user => {
+                    const rowHTML = `
+                        <tr>
+                            <td>${stt++}</td>
+                            <td><strong>${user.fullname}</strong></td>
+                            <td><code style="background:#edf2f7; padding:4px 8px; border-radius:4px; color:#2b6cb0;">${user.username}</code></td>
+                            <td>${user.email}</td>
+                            <td style="text-align: center;">
+                                <button class="btn-action btn-delete-active btn-delete-user" data-username="${user.username}">
+                                    <i class="fas fa-user-minus"></i> Xóa tài khoản
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                    userBody.append(rowHTML);
+                });
+            }
+
+            // Gọi hàm nạp dữ liệu user ngay từ đầu
+            loadUserTable();
+
+            // 2. SỰ KIỆN CLICK CHUYỂN ĐỔI GIỮA CÁC TAB TRÊN SIDEBAR
+            $('.tab-trigger').on('click', function(e) {
+                e.preventDefault();
+                $('.tab-trigger').removeClass('active');
+                $(this).addClass('active');
+
+                const targetTab = $(this).data('target');
+                $('.tab-content').hide();
+                $(targetTab).show();
+            });
+
+            // 3. SỰ KIỆN ĐỂ ADMIN XÓA BỎ MỘT TÀI KHOẢN NGƯỜI DÙNG
+            $(document).on('click', '.btn-delete-user', function() {
+                const usernameTarget = $(this).data('username');
+
+                if (confirm('Bạn có chắc chắn muốn xóa vĩnh viễn tài khoản "' + usernameTarget + '" khỏi hệ thống không?')) {
+                    let listUsers = JSON.parse(localStorage.getItem('listUsers')) || [];
+                    
+                    // Lọc loại bỏ user được chọn ra khỏi mảng
+                    listUsers = listUsers.filter(user => user.username !== usernameTarget);
+                    localStorage.setItem('listUsers', JSON.stringify(listUsers));
+
+                    // Cập nhật lại giao diện bảng ngay lập tức
+                    loadUserTable();
+                    alert('Đã xóa tài khoản thành viên thành công!');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

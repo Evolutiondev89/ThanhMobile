@@ -1,0 +1,133 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng nhập TMEMBER</title>
+    <link rel="stylesheet" href="login.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="container">
+        <div class="left-panel">
+            <img src="images/login.png" alt="ThanhMobile Banner" class="banner-img">
+        </div>
+
+        <div class="right-panel">
+            <div class="login-box">
+                <h2 class="login-title">Đăng nhập TMEMBER</h2>
+                
+                <form>
+                    <div class="input-group">
+                        <label for="username">Tài khoản</label>
+                        <input type="text" id="username" placeholder="Nhập tài khoản của bạn">
+                    </div>
+                                    
+                    <div class="input-group password-group">
+                        <label for="password">Mật khẩu</label>
+                        <div class="password-wrapper">
+                            <input type="password" id="password" placeholder="Nhập mật khẩu của bạn">
+                            <span class="toggle-password">👁️</span>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-submit">Đăng nhập</button>
+                </form>
+
+                <div class="forgot-password">
+                    <a href="#">Quên mật khẩu?</a>
+                </div>
+
+                <div class="divider">
+                    <span>Hoặc đăng nhập bằng</span>
+                </div>
+
+                <div class="social-login">
+                    <button class="btn-social btn-google">
+                        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google"> Google
+                    </button>
+                    <button class="btn-social btn-facebook">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="18" height="18" fill="#1877f2">
+                            <path d="M504 256C504 119 393 8 256 8S8 119 8 256c0 123.8 90.7 226.4 209.3 245V327.7h-63V256h63v-54.6c0-62.2 37-96.6 93.8-96.6 27.2 0 55.7 4.9 55.7 4.9v61.2h-31.3c-30.8 0-40.4 19.1-40.4 38.7V256h69l-11 71.7h-58V501C413.3 482.4 504 379.8 504 256z"/>
+                        </svg>
+                        Facebook
+                    </button>
+                </div>
+
+                <div class="register-link">
+                    Bạn chưa có tài khoản? <a href="signup.html">Đăng ký ngay</a>
+                </div>
+
+                <div class="footer-text">
+                    Mua sắm tại <br>
+                    <a href="index.html">nguyenduythanh.somee.com</a> 
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="jquery4.0.js"></script>
+
+    <script src="jquery4.0.js"></script>
+
+    <script>
+    $(document).ready(function () {
+        $('form').on('submit', function (e) {
+            e.preventDefault(); // Chặn tải lại trang mặc định
+
+            // Xóa sạch các thông báo lỗi cũ của lần bấm trước nếu có
+            $('.error-msg').remove();
+
+            const usernameInput = $('#username').val().trim();
+            const passwordInput = $('#password').val().trim();
+
+            let isValid = true;
+
+            // 1. Kiểm tra trống tài khoản
+            if (usernameInput === '') {
+                $('#username').closest('.input-group').append('<span class="error-msg">Tài khoản không được để trống!</span>');
+                isValid = false;
+            }
+
+            // 2. Kiểm tra trống mật khẩu
+            if (passwordInput === '') {
+                $('#password').closest('.input-group').append('<span class="error-msg">Mật khẩu không được để trống!</span>');
+                isValid = false;
+            }
+
+            if (!isValid) {
+                $('.error-msg').first().siblings('input').focus();
+                return false;
+            }
+
+            // 3. XỬ LÝ SO KHỚP TÀI KHOẢN ĐỂ PHÂN QUYỀN ĐIỀU HƯỚNG
+            
+            // Trường hợp A: Đăng nhập bằng tài khoản Quản trị tối cao cố định
+            if (usernameInput === 'admin' && passwordInput === '123456') {
+                sessionStorage.setItem('isAdminLoggedIn', 'true');
+                alert('Đăng nhập quyền Quản trị viên thành công!');
+                window.location.href = 'admin.html'; // Chuyển hướng sang trang Admin
+                return true;
+            }
+
+            // Trường hợp B: Đăng nhập tài khoản thành viên thường (Quét dữ liệu đã lưu từ LocalStorage)
+            const listUsers = JSON.parse(localStorage.getItem('listUsers')) || [];
+            
+            // Tìm tài khoản trùng khớp cả tên đăng nhập và mật khẩu trong mảng
+            const matchedUser = listUsers.find(user => user.username === usernameInput && user.password === passwordInput);
+
+            if (matchedUser) {
+                // Lưu tên hiển thị của người dùng vào sessionStorage để hiển thị lời chào trên header nếu cần
+                sessionStorage.setItem('currentUser', JSON.stringify(matchedUser));
+                
+                alert('Đăng nhập tài khoản thành viên thành công!\nChào mừng ' + matchedUser.fullname + ' quay trở lại.');
+                window.location.href = 'index.html'; // Chuyển hướng về trang chủ mua sắm
+            } else {
+                // Nếu không tìm thấy bất kỳ tài khoản nào trùng khớp thông tin
+                alert('Tài khoản hoặc mật khẩu không chính xác! Vui lòng kiểm tra lại.');
+            }
+        });
+    });
+    </script>
+
+</body>
+</html>

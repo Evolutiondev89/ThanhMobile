@@ -1,0 +1,287 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng ký thành viên TMEMBER</title>
+    <link rel="stylesheet" href="signup.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="web-wrapper">
+        
+        <div class="top-banner-container">
+            <div class="banner-clip">
+                <img src="images/signup.png" alt="ThanhMobile Banner" class="top-banner-img">
+            </div>
+        </div>
+
+        <div class="bottom-form-container">
+            <div class="register-box">
+
+
+                <p class="social-text">Đăng ký bằng tài khoản mạng xã hội</p>
+                
+                <div class="social-login">
+                    <button class="btn-social btn-google">
+                        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google"> Google
+                    </button>
+                    <button class="btn-social btn-facebook">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="18" height="18" fill="#1877f2">
+                            <path d="M504 256C504 119 393 8 256 8S8 119 8 256c0 123.8 90.7 226.4 209.3 245V327.7h-63V256h63v-54.6c0-62.2 37-96.6 93.8-96.6 27.2 0 55.7 4.9 55.7 4.9v61.2h-31.3c-30.8 0-40.4 19.1-40.4 38.7V256h69l-11 71.7h-58V501C413.3 482.4 504 379.8 504 256z"/>
+                        </svg>
+                        Facebook
+                    </button>
+                </div>
+
+                <div class="divider">
+                    <span>Hoặc điền thông tin sau</span>
+                </div>
+
+                <form>
+                    <h3 class="section-heading">Thông tin cá nhân</h3>
+                    
+                    <div class="form-row">
+                        <div class="input-group">
+                            <label for="fullname">Họ và tên</label>
+                            <input type="text" id="fullname" placeholder="Nhập họ và tên">
+                        </div>
+                        <div class="input-group">
+                            <label for="birthday">Ngày sinh</label>
+                            <input type="date" id="birthday">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="input-group">
+                            <label for="username">Tài khoản</label>
+                            <input type="text" id="username" placeholder="Nhập tài khoản của bạn">
+                        </div>
+                        <div class="input-group">
+                            <label for="email">Email <span class="optional"></span></label>
+                            <input type="email" id="email" placeholder="Nhập email">
+                        </div>
+                    </div>
+
+                    <div class="vat-notice">
+                        <span class="text-green">✓</span> Hóa đơn VAT khi mua hàng sẽ được gửi qua email này
+                    </div>
+
+                    <h3 class="section-heading">Tạo mật khẩu</h3>
+
+                    <div class="form-row">
+                        <div class="input-group">
+                            <label for="password">Mật khẩu</label>
+                            <div class="password-wrapper">
+                                <input type="password" id="password" placeholder="Nhập mật khẩu của bạn">
+                                <span class="toggle-password">👁️</span>
+                            </div>
+                            
+                        </div>
+                        <div class="input-group">
+                            <label for="re-password">Nhập lại mật khẩu</label>
+                            <div class="password-wrapper">
+                                <input type="password" id="re-password" placeholder="Nhập lại mật khẩu của bạn">
+                                <span class="toggle-password">👁️</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="receive-promo">
+                        <label for="receive-promo">Đăng ký nhận tin khuyến mãi từ ThanhMobile</label>
+                    </div>
+
+                    <p class="policy-text">
+                        Bằng việc Đăng ký, bạn đã đọc và đồng ý với <a href="#" class="text-gold-link">Điều khoản sử dụng</a> và <a href="#" class="text-gold-link">Chính sách bảo mật của ThanhMobile</a>.
+                    </p>
+
+                    <div class="action-buttons">
+                        <a href="login.html" class="btn-back">❮ Quay lại đăng nhập</a>
+                        <button type="submit" class="btn-submit">Hoàn tất đăng ký</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+    <script src="jquery4.0.js"></script>
+
+    <script>
+    $(document).ready(function () {
+        
+        // 0. KHỞI TẠO BAN ĐẦU: Khóa tất cả các ô phía dưới, chỉ mở ô Họ và tên
+        $('#username, #email, #password, #re-password').prop('disabled', true).css('opacity', '0.6');
+
+        // HÀM HIỂN THỊ LỖI CHỮ ĐỎ
+        function showError(inputSelector, message) {
+            const group = $(inputSelector).closest('.input-group');
+            group.find('.error-msg').remove();
+            group.append('<span class="error-msg">' + message + '</span>');
+        }
+
+        // HÀM XÓA THÔNG BÁO LỖI
+        function clearError(inputSelector) {
+            $(inputSelector).closest('.input-group').find('.error-msg').remove();
+        }
+
+        // HÀM KHÓA CÁC Ô PHÍA DƯỚI KHI Ô TRÊN BỊ LỖI
+        function lockFieldsFrom(inputSelector) {
+            $(inputSelector).val('').prop('disabled', true).css('opacity', '0.6');
+            $(inputSelector).closest('.input-group').find('.error-msg').remove();
+        }
+
+        // ==========================================
+        // LOGIC KIỂM TRA TUẦN TỰ LẦN LƯỢT TỪNG Ô
+        // ==========================================
+
+        // Bước 1: Kiểm tra Họ và tên -> Mở ô Tài khoản
+        function checkFullname() {
+            const val = $('#fullname').val().trim();
+            const fullnameRegex = /^[a-zA-ZÀ-ỹ\s]+$/;
+            
+            if (val === '') {
+                showError('#fullname', 'Họ và tên không được để trống!');
+                lockFieldsFrom('#username, #email, #password, #re-password');
+                return false;
+            } else if (!fullnameRegex.test(val)) {
+                showError('#fullname', 'Họ và tên chỉ được chứa chữ (không chứa số hoặc ký tự đặc biệt)!');
+                lockFieldsFrom('#username, #email, #password, #re-password');
+                return false;
+            } else {
+                clearError('#fullname'); // Hết lỗi tắt thông báo ngay
+                $('#username').prop('disabled', false).css('opacity', '1'); // Mở khóa ô tiếp theo
+                return true;
+            }
+        }
+
+        // Bước 2: Kiểm tra Tài khoản -> Mở ô Email
+        function checkUsername() {
+            const val = $('#username').val().trim();
+            const usernameRegex = /^[a-zA-Z]+$/;
+            
+            if (val === '') {
+                showError('#username', 'Tài khoản không được để trống!');
+                lockFieldsFrom('#email, #password, #re-password');
+                return false;
+            } else if (!usernameRegex.test(val)) {
+                showError('#username', 'Tài khoản chỉ dùng chữ không dấu (không chứa khoảng trắng, số và các ký tự à, á...)!');
+                lockFieldsFrom('#email, #password, #re-password');
+                return false;
+            } else {
+                clearError('#username');
+                $('#email').prop('disabled', false).css('opacity', '1');
+                return true;
+            }
+        }
+
+        // Bước 3: Kiểm tra Email -> Mở ô Mật khẩu
+        function checkEmail() {
+            const val = $('#email').val().trim();
+            const emailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+            
+            if (val === '') {
+                showError('#email', 'Email không được để trống!');
+                lockFieldsFrom('#password, #re-password');
+                return false;
+            } else if (!emailRegex.test(val)) {
+                showError('#email', 'Email phải đúng định dạng và có đuôi @gmail.com!');
+                lockFieldsFrom('#password, #re-password');
+                return false;
+            } else {
+                clearError('#email');
+                $('#password').prop('disabled', false).css('opacity', '1');
+                return true;
+            }
+        }
+
+        // Bước 4: Kiểm tra Mật khẩu -> Mở ô Nhập lại mật khẩu
+        function checkPassword() {
+            const val = $('#password').val().trim();
+            const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+            
+            if (val === '') {
+                showError('#password', 'Mật khẩu không được để trống!');
+                lockFieldsFrom('#re-password');
+                return false;
+            } else if (!passwordRegex.test(val)) {
+                showError('#password', 'Mật khẩu phải có ít nhất 8 ký tự, chứa cả chữ và số!');
+                lockFieldsFrom('#re-password');
+                return false;
+            } else {
+                clearError('#password');
+                $('#re-password').prop('disabled', false).css('opacity', '1');
+                return true;
+            }
+        }
+
+        // Bước 5: Kiểm tra Nhập lại mật khẩu
+        function checkRePassword() {
+            const val = $('#re-password').val().trim();
+            const passwordVal = $('#password').val().trim();
+            
+            if (val === '') {
+                showError('#re-password', 'Vui lòng nhập lại mật khẩu xác thực!');
+                return false;
+            } else if (val !== passwordVal) {
+                showError('#re-password', 'Mật khẩu nhập lại không trùng khớp!');
+                return false;
+            } else {
+                clearError('#re-password');
+                return true;
+            }
+        }
+
+        // ==========================================
+        // GẮN ĐỒNG THỜI SỰ KIỆN BLUR VÀ INPUT
+        // ==========================================
+        $('#fullname').on('blur input', function () { checkFullname(); });
+        $('#username').on('blur input', function () { checkUsername(); });
+        $('#email').on('blur input', function () { checkEmail(); });
+        $('#password').on('blur input', function () { checkPassword(); if($('#re-password').val() !== '') checkRePassword(); });
+        $('#re-password').on('blur input', function () { checkRePassword(); });
+
+        // KIỂM TRA CUỐI CÙNG KHI SUBMIT
+        $('form').on('submit', function (e) {
+            e.preventDefault();
+
+            // Chạy kiểm tra tuần tự lại từ đầu đến cuối xem tất cả có đúng quy chuẩn không
+            if (checkFullname() && checkUsername() && checkEmail() && checkPassword() && checkRePassword()) {
+                
+                // LẤY GIÁ TRỊ ĐỂ LƯU TRỮ
+                const usernameVal = $('#username').val().trim();
+                const passwordVal = $('#password').val().trim();
+                const fullnameVal = $('#fullname').val().trim();
+                const emailVal = $('#email').val().trim();
+
+                // 1. Lấy danh sách tài khoản cũ từ LocalStorage (Nếu chưa có thì tạo mảng rỗng [])
+                // --- ĐOẠN CHỈNH SỬA TẠO ID TỰ ĐỘNG TỪ 1 ĐẾN VÔ HẠN ---
+                let listUsers = JSON.parse(localStorage.getItem('listUsers')) || [];
+                
+                // Thuật toán gán ID: Lấy độ dài mảng hiện tại cộng thêm 1
+                const nextId = listUsers.length + 1; 
+
+                const newUser = {
+                    id: nextId, // Thêm trường id vào đây
+                    username: usernameVal,
+                    password: passwordVal,
+                    fullname: fullnameVal,
+                    email: emailVal
+                };
+                // -----------------------------------------------------
+
+                listUsers.push(newUser);
+                localStorage.setItem('listUsers', JSON.stringify(listUsers));
+
+                alert('Đăng ký tài khoản thành viên thành công! ID của bạn là: ' + nextId);
+                window.location.href = 'login.html';
+            } else {
+                $('.error-msg').first().siblings('input').focus();
+                return false;
+            }
+        });
+    });
+    </script>
+
+</body>
+</html>

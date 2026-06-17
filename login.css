@@ -1,0 +1,271 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+}
+
+body {
+    background-color: rgb(200,160,90);
+    min-height: 100vh;
+}
+
+
+.container {
+    display: flex;
+    width: 100%;
+    min-height: 100vh;
+}
+
+
+.left-panel {
+    flex: 0 0 50%;
+    width: 50%;
+    height: 100%;
+    background-color: #f9f9f9; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.banner-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; 
+}
+
+
+.right-panel {
+    flex: 0 0 50%;
+    width: 50%;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(14,14,14); 
+    padding: 40px;
+    overflow-y: auto;
+}
+
+.login-box {
+    width: 100%;
+    height: auto;
+}
+
+.login-title {
+    font-size: 24px;
+    color: #e5a93b;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 30px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.input-group {
+    margin-bottom: 20px;
+}
+
+.input-group label {
+    display: block;
+    font-size: 13px;
+    color: #cccccc; 
+    margin-bottom: 6px;
+    font-weight: 500;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #333333;
+    border-radius: 8px;
+    font-size: 14px;
+    outline: none;
+    background-color: #222222;
+    color: #ffffff;
+    transition: border-color 0.2s;
+}
+
+.input-group input:focus {
+    border-color: #e5a93b; 
+}
+
+.password-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 12px;
+    cursor: pointer;
+    color: #888888;
+    font-size: 14px;
+}
+
+
+.btn-submit {
+    width: 100%;
+    padding: 14px;
+    background-color: #e5a93b; 
+    color: #111111; 
+    border: 1px solid #e5a93b;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: all 0.3s ease;
+}
+
+.btn-submit:hover {
+    background-color: #111111;
+    color: #e5a93b; 
+}
+
+.forgot-password {
+    text-align: center;
+    margin-top: 15px;
+}
+
+.forgot-password a {
+    color: #e5a93b;
+    font-size: 14px;
+    text-decoration: none;
+}
+
+.forgot-password a:hover {
+    text-decoration: underline;
+}
+
+.divider {
+    text-align: center;
+    margin: 25px 0;
+    position: relative;
+}
+
+.divider::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background-color: #333333;
+    z-index: 1;
+}
+
+.divider span {
+    background-color: #111111;
+    padding: 0 15px;
+    color: #777777;
+    font-size: 13px;
+    position: relative;
+    z-index: 2;
+}
+.social-login {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.btn-social {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px;
+    border: 1px solid #3a3a3a;
+    border-radius: 8px;
+    background-color: #2d2d2d; 
+    color: #ffffff;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-social:hover {
+    background-color: #3a3a3a;
+}
+
+
+
+.btn-social img {
+    width: 18px;
+    height: 18px;
+}
+
+
+.btn-social svg {
+    width: 18px;
+    height: 18px;
+    fill: blue; 
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.register-link {
+    text-align: center;
+    font-size: 14px;
+    color: #aaaaaa;
+    margin-bottom: 30px;
+}
+
+.register-link a {
+    color: #e5a93b;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.register-link a:hover {
+    text-decoration: underline;
+}
+
+.footer-text {
+    text-align: center;
+    font-size: 12px;
+    color: #666666;
+    line-height: 1.6;
+}
+
+.footer-text a {
+    color: #e5a93b;
+    text-decoration: none;
+}
+.error-msg {
+    color: #ff3333;
+    font-size: 13px;
+    margin-top: 5px;
+    display: block;
+    font-weight: 500;
+}
+
+
+
+@media (max-width:768px){
+
+    .container{
+        flex-direction:column;
+    }
+
+    .left-panel,
+    .right-panel{
+        width:100%;
+        flex:none;
+    }
+
+    .left-panel{
+        height:auto ;
+        min-height:300px;
+        background:red;
+    }
+
+    .banner-img{
+        width:100%;
+        height:auto;
+        display:block;
+    }
+}
